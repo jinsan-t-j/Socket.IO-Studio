@@ -4,6 +4,7 @@
     size="icon" 
     class="h-8 w-8 text-ss-text-muted hover:text-ss-accent-blue hover:bg-ss-accent-blue/10 transition-all"
     :title="`Switch to ${nextTheme} mode`" 
+    :aria-label="`Switch to ${nextTheme} mode`"
     @click="toggleTheme"
   >
     <svg v-if="currentTheme === 'light'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -33,11 +34,11 @@ function toggleTheme() {
     document.documentElement.classList.remove("dark");
   }
   
-  localStorage.setItem("Socket Studio.theme", newTheme);
+  localStorage.setItem("Socket.IO Studio.theme", newTheme);
 }
 
 onMounted(() => {
-  const savedTheme = localStorage.getItem("Socket Studio.theme") || "dark";
+  const savedTheme = localStorage.getItem("Socket.IO Studio.theme") || "dark";
   currentTheme.value = savedTheme;
   if (savedTheme === "dark") {
     document.documentElement.classList.add("dark");

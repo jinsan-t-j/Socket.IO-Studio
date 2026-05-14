@@ -72,7 +72,7 @@
           <div class="max-w-md flex flex-col items-center gap-6">
             <img src="/images/empty-state.png" alt="Empty Workspace" class="w-72 h-72 object-contain opacity-80 drop-shadow-[0_0_20px_rgba(59,130,246,0.2)]" />
             <div class="space-y-2">
-              <h2 class="text-2xl font-bold text-white">Ready to explore?</h2>
+              <h2 class="text-2xl font-bold text-ss-text-main">Ready to explore?</h2>
               <p class="text-ss-text-muted text-sm leading-relaxed">Select a saved request from the sidebar or create a new one to begin your socket session.</p>
             </div>
             <Button size="lg" class="bg-ss-accent-blue hover:bg-ss-accent-blue/90 text-white gap-2" @click="store.createTab">
@@ -84,8 +84,10 @@
           </div>
         </div>
 
-        <div 
-          class="bg-transparent hover:bg-ss-accent-blue/50 transition-colors z-10" 
+        <hr 
+          class="bg-transparent hover:bg-ss-accent-blue/50 transition-colors z-10 border-none" 
+          aria-label="Resize panels"
+          :aria-orientation="store.layoutDock === 'right' ? 'vertical' : 'horizontal'"
           :class="store.layoutDock === 'right' ? 'w-1 cursor-col-resize h-full' : 'h-1 cursor-row-resize w-full'"
           @mousedown="startResize" 
         />
@@ -105,16 +107,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from "vue";
+import { computed, onMounted, onUnmounted, defineAsyncComponent } from "vue";
 
 import ThemeToggle from "@/components/common/ThemeToggle.vue";
-import ConnectionWorkbench from "@/components/connection/ConnectionWorkbench.vue";
 import AppHeader from "@/components/layout/AppHeader.vue";
 import SidebarRail from "@/components/layout/SidebarRail.vue";
 import StatusBar from "@/components/layout/StatusBar.vue";
-import LogConsole from "@/components/metrics/LogConsole.vue";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/stores/app.store";
+
+const ConnectionWorkbench = defineAsyncComponent(() => import("@/components/connection/ConnectionWorkbench.vue"));
+const LogConsole = defineAsyncComponent(() => import("@/components/metrics/LogConsole.vue"));
 
 const store = useAppStore();
 onMounted(() => {

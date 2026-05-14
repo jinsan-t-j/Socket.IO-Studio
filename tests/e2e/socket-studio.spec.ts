@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Socket Studio E2E', () => {
+test.describe('Socket.IO Studio E2E', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
   test('should load the application and show initial tabs', async ({ page }) => {
-    await expect(page).toHaveTitle(/Socket Studio/);
+    await expect(page).toHaveTitle(/Socket.IO Studio/);
     const header = page.getByRole('banner');
     await expect(header.getByText('Example Session')).toBeVisible();
     await expect(header.getByText('New request')).toBeVisible();
@@ -57,7 +57,7 @@ test.describe('Socket Studio E2E', () => {
     await expect(page.getByText('Connected', { exact: false })).toBeVisible();
 
     // Go to Events section
-    await page.getByRole('button', { name: 'Events' }).click();
+    await page.getByRole('tab', { name: 'Events' }).click();
     
     // Add emitter
     await page.getByRole('button', { name: '+ Add Emitter Preset' }).click();
@@ -79,7 +79,7 @@ test.describe('Socket Studio E2E', () => {
 
   test('should add listener and see events', async ({ page }) => {
     // Add listener BEFORE connecting to be sure
-    await page.getByRole('button', { name: 'Listeners' }).click();
+    await page.getByRole('tab', { name: 'Listeners' }).click();
     await page.getByRole('button', { name: '+ Add Listener' }).click();
     await page.getByPlaceholder('Event Name').last().fill('demo:welcome');
 
