@@ -6,6 +6,26 @@ on:
   pull_request:
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      src: ${{ steps.filter.outputs.src }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            src:
+              - 'src/**'
+              - 'public/**'
+              - 'tests/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'vite.config.ts'
+              - 'playwright.config.ts'
+              - '.lighthouserc.cjs'
+
   lint-and-typecheck:
     runs-on: ubuntu-latest
     steps:
@@ -19,6 +39,8 @@ jobs:
       - run: npm run typecheck
 
   test-e2e:
+    needs: changes
+    if: needs.changes.outputs.src == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -44,6 +66,8 @@ jobs:
           retention-days: 30
 
   lighthouse:
+    needs: changes
+    if: needs.changes.outputs.src == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,6 +87,8 @@ jobs:
           LHCI_CHROME_FLAGS: "--no-sandbox --headless=new --disable-gpu --ignore-certificate-errors --disable-dev-shm-usage --disable-setuid-sandbox --disable-software-rasterizer --no-zygote --disable-extensions"
 
   a11y:
+    needs: changes
+    if: needs.changes.outputs.src == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
