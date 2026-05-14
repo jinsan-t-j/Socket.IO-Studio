@@ -31,7 +31,7 @@
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
 
-  /* Socket Studio design tokens */
+  /* Socket.IO Studio design tokens */
   --color-ss-bg-base: hsl(var(--ss-bg-base));
   --color-ss-bg-surface: hsl(var(--ss-bg-surface));
   --color-ss-bg-elevated: hsl(var(--ss-bg-elevated));
@@ -67,48 +67,48 @@
 }
 
 :root {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
 
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
 
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
 
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
 
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
 
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
 
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
 
-  --destructive: 0 62.8% 30.6%;
+  --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 210 40% 98%;
 
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
 
   --radius: 0.5rem;
 
-  /* Socket Studio Tokens - Light Mode */
+  /* Socket.IO Studio Tokens - Light Mode */
   --ss-bg-base: 210 20% 98%;
   --ss-bg-surface: 0 0% 100%;
   --ss-bg-elevated: 210 20% 95%;
   --ss-bg-hover: 210 20% 90%;
   --ss-border: 214.3 31.8% 91.4%;
   --ss-text-main: 222.2 47.4% 11.2%;
-  --ss-text-muted: 215.4 16.3% 46.9%;
-  --ss-accent-blue: 221.2 83.2% 53.3%;
+  --ss-text-muted: 215.4 16.3% 30%;
+  --ss-accent-blue: 221.2 83.2% 40%;
   --ss-status-success: 142.1 76.2% 36.3%;
-  --ss-status-error: 0 84.2% 60.2%;
-  --ss-status-warning: 38 92.2% 50%;
+  --ss-status-error: 0 84.2% 45%;
+  --ss-status-warning: 38 92.2% 35%;
 }
 
 .dark {
@@ -140,7 +140,7 @@
   --input: 217.2 32.6% 17.5%;
   --ring: 212.7 26.8% 83.9%;
 
-  /* Socket Studio Tokens - Dark Mode (Terminal Pro) */
+  /* Socket.IO Studio Tokens - Dark Mode (Terminal Pro) */
   --ss-bg-base: 222 47% 4%;
   --ss-bg-surface: 222 47% 7%;
   --ss-bg-elevated: 222 47% 11%;

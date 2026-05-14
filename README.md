@@ -1,22 +1,12 @@
-# Socket Studio
+# Socket.IO Studio
 
-Socket Studio is a high-performance, developer-first **Socket.IO testing client**. It is designed to be the definitive workbench for Socket.IO power users, providing deep protocol-level control and observability that general-purpose API tools like Postman, Insomnia, or Hoppscotch lack.
+Socket.IO Studio is a high-performance, developer-first **Socket.IO testing client**. It is designed to be the definitive workbench for Socket.IO power users, providing deep protocol-level control and observability that general-purpose API tools like Postman, Insomnia, or Hoppscotch lack.
 
-![Socket Studio Screenshot](public/screenshot.png) _(Note: Placeholder for your actual screenshot)_
+![Socket.IO Studio Screenshot](public/screenshot.png) _(Note: Placeholder for your actual screenshot)_
 
-## 🚀 Why Socket Studio?
+## 🚀 Why Socket.IO Studio?
 
-Socket.IO isn't just "WebSockets". It has namespaces, handshake authentication, volatile emits, and specific ACK mechanisms. Socket Studio was built to support these as first-class citizens.
-
-| Feature                | Postman | Socket Studio |
-| :--------------------- | :-----: | :-----------: |
-| **Namespaces**         |   ❌    |      ✅       |
-| **Handshake Auth**     |   ❌    |      ✅       |
-| **Volatile Emits**     |   ❌    |      ✅       |
-| **Multi-arg Emits**    |   ❌    |      ✅       |
-| **Socket.IO v2/v3/v4** |   ❌    |      ✅       |
-| **Scripting Hooks**    |   ❌    |      ✅       |
-| **ACK Inspector**      |   ⚠️    |      ✅       |
+Socket.IO isn't just "WebSockets". It has namespaces, handshake authentication, volatile emits, and specific ACK mechanisms. Socket.IO Studio was built to support these as first-class citizens.
 
 ## ✨ Features
 

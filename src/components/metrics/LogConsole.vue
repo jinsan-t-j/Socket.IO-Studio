@@ -23,6 +23,7 @@
           variant="ghost" 
           size="icon" 
           class="h-7 w-7 text-ss-text-muted hover:text-ss-status-error hover:bg-ss-status-error/10 transition-colors"
+          aria-label="Clear console"
           title="Clear console"
           @click="$emit('clear')"
         >
@@ -35,11 +36,11 @@
 
     <!-- Log List -->
     <div class="flex-1 overflow-y-auto no-scrollbar font-mono">
-      <div v-if="logs.length === 0" class="flex flex-col items-center justify-center h-full text-ss-text-muted opacity-40 py-12">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mb-4">
+      <div v-if="logs.length === 0" class="flex flex-col items-center justify-center h-full text-ss-text-muted py-12">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mb-4 opacity-40">
           <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/>
         </svg>
-        <span class="text-xs uppercase tracking-widest">No logs to display</span>
+        <span class="text-xs uppercase tracking-widest font-semibold">No logs to display</span>
       </div>
 
       <div 
@@ -47,8 +48,10 @@
         :key="log.id" 
         class="border-b border-ss-border/30 group last:border-0"
       >
-        <div 
-          class="flex items-center gap-4 px-4 py-2 cursor-pointer hover:bg-ss-bg-surface/30 transition-colors"
+        <button 
+          type="button"
+          class="w-full flex items-center gap-4 px-4 py-2 text-left hover:bg-ss-bg-surface/30 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ss-accent-blue"
+          :aria-expanded="expandedId === log.id"
           @click="toggleExpand(log.id)"
         >
           <div class="flex items-center gap-3 min-w-[200px]">
@@ -66,13 +69,13 @@
           </span>
           
           <svg 
-            width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"
             class="text-ss-text-muted transition-transform duration-200"
             :class="{ 'rotate-90': expandedId === log.id }"
           >
             <polyline points="9 18 15 12 9 6"/>
           </svg>
-        </div>
+        </button>
 
         <!-- Detail Panel -->
         <div 

@@ -29,7 +29,7 @@
           Disconnect
         </Button>
         
-        <Button variant="outline" class="border-ss-border text-ss-text-muted hover:text-white gap-2" title="Reset to default configuration" @click="$emit('reset-tab')">
+        <Button variant="outline" class="border-ss-border text-ss-text-muted gap-2" title="Reset to default configuration" aria-label="Reset request" @click="$emit('reset-tab')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
             <path d="M3 3v5h5"/>
@@ -65,7 +65,7 @@
           <label class="flex items-center gap-2 text-[10px] font-bold text-ss-text-muted uppercase tracking-wider whitespace-nowrap">
             Version
             <Select :model-value="String(tab.draft.version)" @update:model-value="(val: any) => updateCore('version', Number(val))">
-              <SelectTrigger class="h-8 w-20 bg-ss-bg-base border-ss-border text-ss-text-main text-xs">
+              <SelectTrigger class="h-8 w-20 bg-ss-bg-base border-ss-border text-ss-text-main text-xs" aria-label="Socket.IO version">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent class="bg-ss-bg-surface border-ss-border text-ss-text-main">
@@ -79,12 +79,16 @@
       </div>
     </header>
 
-    <div class="flex border-b border-ss-border px-6 overflow-x-auto no-scrollbar" role="tablist">
-      <button
-        v-for="section in sections"
-        :key="section.key"
-        type="button"
-        class="px-4 py-3 text-sm font-medium transition-colors border-b-2 relative -mb-[2px] whitespace-nowrap"
+    <div class="flex border-b border-ss-border px-6 overflow-x-auto no-scrollbar" role="tablist" aria-label="Connection sections">
+        <button
+          v-for="section in sections"
+          :id="`tab-${section.key}`"
+          :key="section.key"
+          type="button"
+          role="tab"
+          :aria-selected="activeSection === section.key"
+          aria-controls="tabpanel-container"
+          class="px-4 py-3 text-sm font-medium transition-colors border-b-2 relative -mb-[2px] whitespace-nowrap"
         :class="activeSection === section.key 
           ? 'text-ss-accent-blue border-ss-accent-blue' 
           : 'text-ss-text-muted border-transparent hover:text-ss-text-main hover:border-ss-border'"
@@ -94,9 +98,14 @@
       </button>
     </div>
 
-    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+    <div 
+      id="tabpanel-container"
+      class="flex-1 overflow-y-auto p-6 space-y-6"
+      role="tabpanel"
+      :aria-labelledby="`tab-${activeSection}`"
+    >
       <div class="space-y-1">
-        <h3 class="text-base font-semibold text-white">{{ activeSectionLabel }}</h3>
+        <h3 class="text-base font-semibold text-ss-text-main">{{ activeSectionLabel }}</h3>
         <p class="text-xs text-ss-text-muted">{{ activeSectionDescription }}</p>
       </div>
 
@@ -125,16 +134,16 @@
         <template v-if="activeSection === 'headers'">
           <div v-if="modeFor('headers') === 'form'" class="space-y-2">
             <div v-for="row in tab.draft.headers" :key="row.id" class="flex items-center gap-2 group">
-              <Checkbox :checked="row.enabled" @update:checked="(val: boolean) => $emit('toggle-header', row.id, !!val)" />
-              <Input :model-value="row.key" placeholder="Key" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-header', row.id, { key: String(val) })" />
-              <Input :model-value="row.value" placeholder="Value" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-header', row.id, { value: String(val) })" />
-              <Button variant="ghost" size="icon" class="h-9 w-9 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" @click="$emit('remove-header', row.id)">
+              <Checkbox :checked="row.enabled" aria-label="Enable header" @update:checked="(val: boolean) => $emit('toggle-header', row.id, !!val)" />
+              <Input :model-value="row.key" placeholder="Key" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" aria-label="Header key" @update:model-value="(val: string | number) => $emit('update-header', row.id, { key: String(val) })" />
+              <Input :model-value="row.value" placeholder="Value" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" aria-label="Header value" @update:model-value="(val: string | number) => $emit('update-header', row.id, { value: String(val) })" />
+              <Button variant="ghost" size="icon" class="h-9 w-9 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Remove header" @click="$emit('remove-header', row.id)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M18 6L6 18M6 6l12 12"/>
                 </svg>
               </Button>
             </div>
-            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted hover:text-white" @click="$emit('add-header')">+ Add row</Button>
+            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted" @click="$emit('add-header')">+ Add row</Button>
           </div>
           <Textarea v-else class="min-h-[300px] font-mono text-xs bg-ss-bg-surface border-ss-border text-ss-text-main" :model-value="serialize(tab.draft.headers)" @change="$emit('replace-json', 'headers', ($event.target as HTMLTextAreaElement).value)" />
         </template>
@@ -142,16 +151,16 @@
         <template v-else-if="activeSection === 'query'">
           <div v-if="modeFor('query') === 'form'" class="space-y-2">
             <div v-for="row in tab.draft.queryParams" :key="row.id" class="flex items-center gap-2 group">
-              <Checkbox :checked="row.enabled" @update:checked="(val: boolean) => $emit('toggle-query-enabled', row.id, !!val)" />
-              <Input :model-value="row.key" placeholder="Key" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-query', row.id, { key: String(val) })" />
-              <Input :model-value="row.value" placeholder="Value" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-query', row.id, { value: String(val) })" />
-              <Button variant="ghost" size="icon" class="h-9 w-9 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" @click="$emit('remove-query', row.id)">
+              <Checkbox :checked="row.enabled" aria-label="Enable query parameter" @update:checked="(val: boolean) => $emit('toggle-query-enabled', row.id, !!val)" />
+              <Input :model-value="row.key" placeholder="Key" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" aria-label="Query key" @update:model-value="(val: string | number) => $emit('update-query', row.id, { key: String(val) })" />
+              <Input :model-value="row.value" placeholder="Value" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" aria-label="Query value" @update:model-value="(val: string | number) => $emit('update-query', row.id, { value: String(val) })" />
+              <Button variant="ghost" size="icon" class="h-9 w-9 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Remove query parameter" @click="$emit('remove-query', row.id)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M18 6L6 18M6 6l12 12"/>
                 </svg>
               </Button>
             </div>
-            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted hover:text-white" @click="$emit('add-query')">+ Add row</Button>
+            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted" @click="$emit('add-query')">+ Add row</Button>
           </div>
           <Textarea v-else class="min-h-[300px] font-mono text-xs bg-ss-bg-surface border-ss-border text-ss-text-main" :model-value="serialize(tab.draft.queryParams)" @change="$emit('replace-json', 'queryParams', ($event.target as HTMLTextAreaElement).value)" />
         </template>
@@ -233,21 +242,22 @@
             <div class="grid grid-cols-3 gap-4">
               <div class="space-y-2">
                 <label class="text-[10px] font-bold text-ss-text-muted uppercase tracking-wider">Attempts</label>
-                <Input type="number" :model-value="tab.draft.options.reconnectionAttempts" class="bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-options', { reconnectionAttempts: Number(val) })" />
+                <Input type="number" aria-label="Reconnection attempts" :model-value="tab.draft.options.reconnectionAttempts" class="bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-options', { reconnectionAttempts: Number(val) })" />
               </div>
               <div class="space-y-2">
                 <label class="text-[10px] font-bold text-ss-text-muted uppercase tracking-wider">Delay (ms)</label>
-                <Input type="number" :model-value="tab.draft.options.reconnectionDelay" class="bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-options', { reconnectionDelay: Number(val) })" />
+                <Input type="number" aria-label="Reconnection delay" :model-value="tab.draft.options.reconnectionDelay" class="bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-options', { reconnectionDelay: Number(val) })" />
               </div>
               <div class="space-y-2">
                 <label class="text-[10px] font-bold text-ss-text-muted uppercase tracking-wider">Timeout (ms)</label>
-                <Input type="number" :model-value="tab.draft.options.timeout" class="bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-options', { timeout: Number(val) })" />
+                <Input type="number" aria-label="Connection timeout" :model-value="tab.draft.options.timeout" class="bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-options', { timeout: Number(val) })" />
               </div>
             </div>
           </div>
           <div v-else class="relative group/editor h-full">
             <Textarea 
               ref="optionsTextarea"
+              aria-label="Socket.IO connection options JSON"
               class="min-h-[300px] h-full font-mono text-xs bg-ss-bg-surface border-ss-border text-ss-text-main" 
               :model-value="serialize(tab.draft.options)" 
               @change="$emit('replace-json', 'options', ($event.target as HTMLTextAreaElement).value)" 
@@ -255,8 +265,9 @@
             <Button 
               variant="ghost" 
               size="sm" 
-              class="absolute bottom-2 right-4 h-7 px-2 text-[10px] bg-ss-bg-surface/80 hover:bg-ss-bg-surface border border-ss-border text-ss-text-muted hover:text-white opacity-0 group-hover/editor:opacity-100 transition-opacity"
+              class="absolute bottom-2 right-4 h-7 px-2 text-[10px] bg-ss-bg-surface/80 hover:bg-ss-bg-surface border border-ss-border text-ss-text-muted opacity-0 group-hover/editor:opacity-100 transition-opacity"
               title="Beautify JSON"
+              aria-label="Beautify options JSON"
               @click="beautifyOptions"
             >
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="mr-1.5">
@@ -271,15 +282,15 @@
           <div class="space-y-3">
             <div v-for="listener in tab.draft.listeners" :key="listener.id" class="flex items-center gap-3 bg-ss-bg-surface/30 p-2 pl-3 rounded-md border border-ss-border group">
               <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-[0_0_8px_rgba(0,0,0,0.5)]" :style="{ backgroundColor: listener.color }" />
-              <Input :model-value="listener.eventName" placeholder="Event Name" class="flex-1 bg-transparent border-none text-ss-text-main h-8 font-medium placeholder:font-normal" @update:model-value="(val: string | number) => $emit('update-listener', listener.id, { eventName: String(val) })" />
-              <Checkbox :checked="listener.enabled" @update:checked="(val: boolean) => $emit('update-listener', listener.id, { enabled: !!val })" />
-              <Button variant="ghost" size="icon" class="h-8 w-8 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" @click="$emit('remove-listener', listener.id)">
+              <Input :model-value="listener.eventName" placeholder="Event Name" class="flex-1 bg-transparent border-none text-ss-text-main h-8 font-medium placeholder:font-normal" aria-label="Event name" @update:model-value="(val: string | number) => $emit('update-listener', listener.id, { eventName: String(val) })" />
+              <Checkbox :checked="listener.enabled" aria-label="Enable listener" @update:checked="(val: boolean) => $emit('update-listener', listener.id, { enabled: !!val })" />
+              <Button variant="ghost" size="icon" class="h-8 w-8 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Remove listener" @click="$emit('remove-listener', listener.id)">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M18 6L6 18M6 6l12 12"/>
                 </svg>
               </Button>
             </div>
-            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted hover:text-white" @click="$emit('add-listener')">+ Add Listener</Button>
+            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted" @click="$emit('add-listener')">+ Add Listener</Button>
           </div>
         </template>
 
@@ -287,16 +298,17 @@
           <div class="space-y-4">
             <div v-for="emitter in tab.draft.emitters" :key="emitter.id" class="bg-ss-bg-surface/30 rounded-lg border border-ss-border overflow-hidden">
               <div class="flex items-center gap-3 p-3 border-b border-ss-border bg-ss-bg-surface/50">
-                <Input :model-value="emitter.eventName" placeholder="Event Name" class="flex-1 bg-transparent border-none text-ss-text-main h-8 font-semibold" @update:model-value="(val: string | number) => $emit('update-emitter', emitter.id, { eventName: String(val) })" />
+                <Input aria-label="Event name" :model-value="emitter.eventName" placeholder="Event Name" class="flex-1 bg-transparent border-none text-ss-text-main h-8 font-semibold" @update:model-value="(val: string | number) => $emit('update-emitter', emitter.id, { eventName: String(val) })" />
                 <Button variant="default" size="sm" class="bg-ss-accent-blue hover:bg-ss-accent-blue/90 text-white h-8" @click="$emit('emit-event', emitter)">Emit</Button>
-                <Button variant="ghost" size="icon" class="h-8 w-8 text-ss-text-muted hover:text-ss-status-error" @click="$emit('remove-emitter', emitter.id)">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <Button variant="ghost" size="icon" class="h-8 w-8 text-ss-text-muted hover:text-ss-status-error" aria-label="Remove emitter" @click="$emit('remove-emitter', emitter.id)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path d="M18 6L6 18M6 6l12 12"/>
                   </svg>
                 </Button>
               </div>
               <div class="relative group/payload">
                 <Textarea 
+                  aria-label="Event payload JSON"
                   class="min-h-[120px] bg-transparent border-none font-mono text-[11px] rounded-none focus-visible:ring-0" 
                   :model-value="emitter.payload" 
                   placeholder="Payload JSON (Object or Array recommended)" 
@@ -305,32 +317,33 @@
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  class="absolute bottom-2 right-2 h-6 px-2 text-[10px] bg-ss-bg-surface/50 hover:bg-ss-bg-surface border border-ss-border/50 text-ss-text-muted hover:text-white opacity-0 group-hover/payload:opacity-100 transition-opacity"
+                  class="absolute bottom-2 right-2 h-6 px-2 text-[10px] bg-ss-bg-surface/50 hover:bg-ss-bg-surface border border-ss-border/50 text-ss-text-muted opacity-0 group-hover/payload:opacity-100 transition-opacity"
                   title="Beautify JSON Payload"
+                  aria-label="Beautify emitter payload"
                   @click="beautifyEmitter(emitter.id, emitter.payload)"
                 >
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="mr-1.5">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="mr-1.5" aria-hidden="true">
                     <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
                   </svg>
                   Beautify
                 </Button>
               </div>
             </div>
-            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted hover:text-white" @click="$emit('add-emitter')">+ Add Emitter Preset</Button>
+            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted" @click="$emit('add-emitter')">+ Add Emitter Preset</Button>
           </div>
         </template>
 
         <template v-else-if="activeSection === 'raw'">
           <div class="flex flex-col gap-4 h-full">
             <div class="flex justify-end gap-2">
-              <Button variant="secondary" size="sm" class="bg-ss-bg-surface hover:bg-ss-bg-surface/80 text-white" @click="beautifyRaw">
+              <Button variant="secondary" size="sm" class="bg-ss-bg-surface hover:bg-ss-bg-surface/80 text-white" aria-label="Beautify payload JSON" @click="beautifyRaw">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="mr-2">
                   <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
                 </svg>
                 Beautify
               </Button>
-              <Button variant="secondary" size="sm" class="bg-ss-bg-surface hover:bg-ss-bg-surface/80 text-white" @click="copyRaw">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mr-2">
+              <Button variant="secondary" size="sm" class="bg-ss-bg-surface hover:bg-ss-bg-surface/80 text-white" aria-label="Copy raw JSON" @click="copyRaw">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mr-2" aria-hidden="true">
                   <path d="M8 4v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7.242a2 2 0 0 0-.602-1.43L16.083 2.57A2 2 0 0 0 14.685 2H10a2 2 0 0 0-2 2Z"/>
                   <path d="M16 18v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2"/>
                 </svg>

@@ -5,7 +5,30 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      src: ${{ steps.filter.outputs.src }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            src:
+              - 'src/**'
+              - 'public/**'
+              - 'tests/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'vite.config.ts'
+              - 'playwright.config.ts'
+              - '.lighthouserc.cjs'
+
   lint-and-typecheck:
     runs-on: ubuntu-latest
     steps:
@@ -19,6 +42,8 @@ jobs:
       - run: npm run typecheck
 
   test-e2e:
+    needs: changes
+    if: needs.changes.outputs.src == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -31,9 +56,11 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
       - name: Build app
-        run: npm run build
+        run: npm run build:ssg
       - name: Run E2E tests
         run: npm run test:e2e
+        env:
+          CI: true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -42,21 +69,8 @@ jobs:
           retention-days: 30
 
   lighthouse:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: npm
-      - run: npm ci
-      - run: npm run build
-      - name: Run Lighthouse CI
-        run: npm run lighthouse
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-
-  a11y:
+    needs: changes
+    if: needs.changes.outputs.src == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -67,9 +81,44 @@ jobs:
       - run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
-      - run: npm run build
+      - name: Build SSG
+        run: npm run build:ssg
+      - name: Run Lighthouse CI
+        run: npm run lighthouse
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_CHROME_FLAGS: "--no-sandbox --headless=new --disable-gpu --ignore-certificate-errors --disable-dev-shm-usage --disable-setuid-sandbox --disable-software-rasterizer --no-zygote --disable-extensions"
+
+  a11y:
+    needs: changes
+    if: needs.changes.outputs.src == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm_config_yes=true npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+      - run: npm run build:ssg
       - name: Run Accessibility Audit
         run: |
           npm run preview &
-          sleep 5
+          # Wait up to 30s for port 4173 to be ready
+          timeout 30s bash -c 'until curl -s http://localhost:4173 > /dev/null; do sleep 1; done'
           npm run test:a11y
+
+  # Summary job to satisfy Branch Protection Rules requiring a check named "CI"
+  CI:
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, test-e2e, lighthouse, a11y]
+    if: always()
+    steps:
+      - name: All tests passed
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: exit 0
+      - name: Some tests failed
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
