@@ -16,13 +16,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes("node_modules")) {
-            if (id.includes("socket.io-client")) return "socket";
-            if (id.includes("vue") || id.includes("pinia") || id.includes("@vueuse")) return "vendor";
-            return "deps";
-          }
-        },
+        // Use default chunking strategy to avoid circular dependency issues found in production builds
       },
     },
   },
