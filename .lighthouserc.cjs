@@ -16,8 +16,8 @@ function findChrome() {
       "/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
     ],
     linux: [
-      join(homedir(), ".cache/ms-playwright"),
       "/usr/bin/google-chrome",
+      join(homedir(), ".cache/ms-playwright"),
       "/usr/bin/chromium",
     ],
   };
@@ -49,7 +49,7 @@ function findChrome() {
 module.exports = {
   ci: {
     collect: {
-      startServerCommand: "npm run preview -- --port 4173 --strictPort",
+      startServerCommand: "npx serve dist -p 4173",
       startServerReadyPattern: "http://localhost:4173",
       startServerReadyTimeout: 300000,
       numberOfRuns: 3,
@@ -60,7 +60,7 @@ module.exports = {
         console.log(`LHCI: Using Chrome at ${path}`);
         return path;
       })(),
-      chromeFlags: "--no-sandbox --headless=new --disable-gpu --ignore-certificate-errors --disable-dev-shm-usage --disable-setuid-sandbox --disable-software-rasterizer",
+      chromeFlags: "--no-sandbox --headless=new --disable-gpu --ignore-certificate-errors --disable-dev-shm-usage --disable-setuid-sandbox --disable-software-rasterizer --no-zygote --disable-extensions",
     },
     assert: {
       assertions: {
