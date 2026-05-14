@@ -57,15 +57,7 @@ jobs:
       - name: Build SSG
         run: npm run build:ssg
       - name: Run Lighthouse CI
-        run: |
-          CHROME_PATH=$(find ~/.cache/ms-playwright/chromium-*/chrome-linux -name "chrome" -type f 2>/dev/null | sort -V | tail -n 1)
-          if [ -z "$CHROME_PATH" ]; then
-            echo "::error::Chrome binary not found in Playwright cache"
-            exit 1
-          fi
-          echo "Using Chrome at: $CHROME_PATH"
-          export CHROME_PATH
-          npx lhci autorun
+        run: npm run lighthouse
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 

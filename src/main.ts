@@ -16,7 +16,9 @@ export const createApp = ViteSSG(
   { routes: [{ path: "/", component: () => import("./App.vue") }] },
   ({ app }) => {
     const pinia = createPinia();
-    pinia.use(piniaPluginPersistedstate);
+    if (!import.meta.env.SSR) {
+      pinia.use(piniaPluginPersistedstate);
+    }
     app.use(pinia);
   },
 );

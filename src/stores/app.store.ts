@@ -179,7 +179,7 @@ async function requestPersistence() {
 export const useAppStore = defineStore("app", {
   persist: {
     key: STORAGE_KEY,
-    storage: localStorage,
+    storage: globalThis.window === undefined ? undefined : globalThis.localStorage,
   },
   state: (): WorkspaceState => ({
     brand: "Socket.IO Studio",
