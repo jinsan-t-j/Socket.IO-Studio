@@ -48,8 +48,10 @@
         :key="log.id" 
         class="border-b border-ss-border/30 group last:border-0"
       >
-        <div 
-          class="flex items-center gap-4 px-4 py-2 cursor-pointer hover:bg-ss-bg-surface/30 transition-colors"
+        <button 
+          type="button"
+          class="w-full flex items-center gap-4 px-4 py-2 text-left hover:bg-ss-bg-surface/30 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ss-accent-blue"
+          :aria-expanded="expandedId === log.id"
           @click="toggleExpand(log.id)"
         >
           <div class="flex items-center gap-3 min-w-[200px]">
@@ -67,13 +69,13 @@
           </span>
           
           <svg 
-            width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"
             class="text-ss-text-muted transition-transform duration-200"
             :class="{ 'rotate-90': expandedId === log.id }"
           >
             <polyline points="9 18 15 12 9 6"/>
           </svg>
-        </div>
+        </button>
 
         <!-- Detail Panel -->
         <div 

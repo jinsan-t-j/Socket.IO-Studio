@@ -107,8 +107,8 @@
   --ss-text-muted: 215.4 16.3% 30%;
   --ss-accent-blue: 221.2 83.2% 40%;
   --ss-status-success: 142.1 76.2% 36.3%;
-  --ss-status-error: 0 84.2% 60.2%;
-  --ss-status-warning: 38 92.2% 50%;
+  --ss-status-error: 0 84.2% 45%;
+  --ss-status-warning: 38 92.2% 35%;
 }
 
 .dark {

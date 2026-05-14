@@ -12,4 +12,14 @@ export default defineConfig({
   optimizeDeps: {
     include: ["pinia-plugin-persistedstate"],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["vue", "pinia", "@vueuse/core"],
+          socket: ["socket.io-client"],
+        },
+      },
+    },
+  },
 });

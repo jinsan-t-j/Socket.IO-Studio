@@ -6,9 +6,10 @@
     </div>
 
     <div class="flex flex-1 items-center h-full px-4 overflow-x-auto no-scrollbar" role="tablist">
-      <div
+      <button
         v-for="tab in tabs"
         :key="tab.id"
+        type="button"
         role="tab"
         :aria-selected="tab.id === activeTabId"
         class="group flex items-center gap-2 px-3 h-full cursor-pointer border-r border-ss-border hover:bg-ss-bg-surface transition-colors relative min-w-[120px] max-w-[200px]"
@@ -17,11 +18,14 @@
         @dblclick="startRename(tab)"
       >
         <span
-class="w-2 h-2 rounded-full shrink-0" :class="[
-          tab.runtime.status === 'connected' ? 'bg-ss-status-success' : 
-          tab.runtime.status === 'connecting' ? 'bg-ss-status-warning animate-pulse' : 
-          'bg-ss-text-muted'
-        ]" />
+          class="w-2 h-2 rounded-full shrink-0" 
+          aria-hidden="true"
+          :class="[
+            tab.runtime.status === 'connected' ? 'bg-ss-status-success' : 
+            tab.runtime.status === 'connecting' ? 'bg-ss-status-warning animate-pulse' : 
+            'bg-ss-text-muted'
+          ]" 
+        />
         
         <input
           v-if="renamingTabId === tab.id"
@@ -41,7 +45,6 @@ class="w-2 h-2 rounded-full shrink-0" :class="[
         <div class="ml-auto flex items-center gap-2 h-full">
           <button
             v-if="tab.dirty"
-            type="button"
             class="w-2 h-2 rounded-full bg-ss-accent-blue shadow-[0_0_8px_rgba(59,130,246,0.5)] hover:scale-125 hover:shadow-[0_0_12px_rgba(59,130,246,0.8)] transition-all shrink-0"
             aria-label="Save changes"
             @click.stop="$emit('save-tab', tab.id)"
@@ -53,17 +56,17 @@ class="w-2 h-2 rounded-full shrink-0" :class="[
             aria-label="Close tab"
             @click.stop="$emit('close-tab', tab.id)"
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
           </button>
         </div>
 
-        <div v-if="tab.id === activeTabId" class="absolute bottom-0 left-0 right-0 h-0.5 bg-ss-accent-blue" />
-      </div>
+        <div v-if="tab.id === activeTabId" class="absolute bottom-0 left-0 right-0 h-0.5 bg-ss-accent-blue" aria-hidden="true" />
+      </button>
 
       <Button variant="ghost" size="icon" class="h-8 w-8 ml-2 text-ss-text-muted hover:text-ss-text-main" aria-label="Create new request" @click="$emit('new-tab')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M12 5v14M5 12h14"/>
         </svg>
       </Button>
@@ -72,11 +75,11 @@ class="w-2 h-2 rounded-full shrink-0" :class="[
     <div class="flex items-center gap-2">
       <slot name="extra" />
       <Button variant="ghost" size="icon" class="h-8 w-8 text-ss-text-muted hover:text-ss-text-main" :title="`Dock ${dockLabel}`" :aria-label="`Dock ${dockLabel}`" @click="$emit('toggle-dock')">
-        <svg v-if="dock === 'right'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg v-if="dock === 'right'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <rect x="3" y="3" width="18" height="18" rx="2"/>
           <path d="M15 3v18"/>
         </svg>
-        <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <rect x="3" y="3" width="18" height="18" rx="2"/>
           <path d="M3 15h18"/>
         </svg>

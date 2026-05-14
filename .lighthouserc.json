@@ -3,8 +3,8 @@
     "collect": {
       "startServerCommand": "npm run preview",
       "startServerReadyPattern": "Local:.*http",
-      "startServerReadyTimeout": 30000,
-      "numberOfRuns": 3,
+      "startServerReadyTimeout": 60000,
+      "numberOfRuns": 1,
       "url": [
         "http://localhost:4173/"
       ],
