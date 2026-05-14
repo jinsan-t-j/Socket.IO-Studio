@@ -29,7 +29,7 @@
           Disconnect
         </Button>
         
-        <Button variant="outline" class="border-ss-border text-ss-text-muted hover:text-white gap-2" title="Reset to default configuration" aria-label="Reset request" @click="$emit('reset-tab')">
+        <Button variant="outline" class="border-ss-border text-ss-text-muted gap-2" title="Reset to default configuration" aria-label="Reset request" @click="$emit('reset-tab')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
             <path d="M3 3v5h5"/>
@@ -143,7 +143,7 @@
                 </svg>
               </Button>
             </div>
-            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted hover:text-white" @click="$emit('add-header')">+ Add row</Button>
+            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted" @click="$emit('add-header')">+ Add row</Button>
           </div>
           <Textarea v-else class="min-h-[300px] font-mono text-xs bg-ss-bg-surface border-ss-border text-ss-text-main" :model-value="serialize(tab.draft.headers)" @change="$emit('replace-json', 'headers', ($event.target as HTMLTextAreaElement).value)" />
         </template>
@@ -160,7 +160,7 @@
                 </svg>
               </Button>
             </div>
-            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted hover:text-white" @click="$emit('add-query')">+ Add row</Button>
+            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted" @click="$emit('add-query')">+ Add row</Button>
           </div>
           <Textarea v-else class="min-h-[300px] font-mono text-xs bg-ss-bg-surface border-ss-border text-ss-text-main" :model-value="serialize(tab.draft.queryParams)" @change="$emit('replace-json', 'queryParams', ($event.target as HTMLTextAreaElement).value)" />
         </template>
@@ -265,7 +265,7 @@
             <Button 
               variant="ghost" 
               size="sm" 
-              class="absolute bottom-2 right-4 h-7 px-2 text-[10px] bg-ss-bg-surface/80 hover:bg-ss-bg-surface border border-ss-border text-ss-text-muted hover:text-white opacity-0 group-hover/editor:opacity-100 transition-opacity"
+              class="absolute bottom-2 right-4 h-7 px-2 text-[10px] bg-ss-bg-surface/80 hover:bg-ss-bg-surface border border-ss-border text-ss-text-muted opacity-0 group-hover/editor:opacity-100 transition-opacity"
               title="Beautify JSON"
               aria-label="Beautify options JSON"
               @click="beautifyOptions"
@@ -290,7 +290,7 @@
                 </svg>
               </Button>
             </div>
-            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted hover:text-white" @click="$emit('add-listener')">+ Add Listener</Button>
+            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted" @click="$emit('add-listener')">+ Add Listener</Button>
           </div>
         </template>
 
@@ -317,7 +317,7 @@
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  class="absolute bottom-2 right-2 h-6 px-2 text-[10px] bg-ss-bg-surface/50 hover:bg-ss-bg-surface border border-ss-border/50 text-ss-text-muted hover:text-white opacity-0 group-hover/payload:opacity-100 transition-opacity"
+                  class="absolute bottom-2 right-2 h-6 px-2 text-[10px] bg-ss-bg-surface/50 hover:bg-ss-bg-surface border border-ss-border/50 text-ss-text-muted opacity-0 group-hover/payload:opacity-100 transition-opacity"
                   title="Beautify JSON Payload"
                   aria-label="Beautify emitter payload"
                   @click="beautifyEmitter(emitter.id, emitter.payload)"
@@ -329,7 +329,7 @@
                 </Button>
               </div>
             </div>
-            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted hover:text-white" @click="$emit('add-emitter')">+ Add Emitter Preset</Button>
+            <Button variant="outline" size="sm" class="border-ss-border text-ss-text-muted" @click="$emit('add-emitter')">+ Add Emitter Preset</Button>
           </div>
         </template>
 

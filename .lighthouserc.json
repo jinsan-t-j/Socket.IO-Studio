@@ -1,14 +1,14 @@
 {
   "ci": {
     "collect": {
-      "startServerCommand": "npm run preview",
+      "startServerCommand": "npm run preview -- --port 4173 --strictPort",
       "startServerReadyPattern": "Local:.*http",
-      "startServerReadyTimeout": 60000,
-      "numberOfRuns": 1,
+      "startServerReadyTimeout": 120000,
+      "numberOfRuns": 3,
       "url": [
         "http://localhost:4173/"
       ],
-      "chromeFlags": "--no-sandbox --headless=new --disable-gpu --ignore-certificate-errors --disable-features=SafeBrowsing"
+      "chromeFlags": "--no-sandbox --headless=new --disable-gpu --ignore-certificate-errors --disable-dev-shm-usage --disable-setuid-sandbox --disable-software-rasterizer"
     },
     "assert": {
       "assertions": {
