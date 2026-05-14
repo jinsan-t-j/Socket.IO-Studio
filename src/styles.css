@@ -1,0 +1,197 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  /* Socket Studio design tokens */
+  --color-ss-bg-base: hsl(var(--ss-bg-base));
+  --color-ss-bg-surface: hsl(var(--ss-bg-surface));
+  --color-ss-bg-elevated: hsl(var(--ss-bg-elevated));
+  --color-ss-bg-hover: hsl(var(--ss-bg-hover));
+  --color-ss-border: hsl(var(--ss-border));
+  --color-ss-accent-blue: hsl(var(--ss-accent-blue));
+  --color-ss-status-success: hsl(var(--ss-status-success));
+  --color-ss-status-error: hsl(var(--ss-status-error));
+  --color-ss-status-warning: hsl(var(--ss-status-warning));
+  --color-ss-text-main: hsl(var(--ss-text-main));
+  --color-ss-text-muted: hsl(var(--ss-text-muted));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --font-mono: var(--font-mono), monospace;
+  --font-ui: var(--font-ui), sans-serif;
+
+  --breakpoint-2xl: 1400px;
+
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+:root {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+
+  --radius: 0.5rem;
+
+  /* Socket Studio Tokens - Light Mode */
+  --ss-bg-base: 210 20% 98%;
+  --ss-bg-surface: 0 0% 100%;
+  --ss-bg-elevated: 210 20% 95%;
+  --ss-bg-hover: 210 20% 90%;
+  --ss-border: 214.3 31.8% 91.4%;
+  --ss-text-main: 222.2 47.4% 11.2%;
+  --ss-text-muted: 215.4 16.3% 46.9%;
+  --ss-accent-blue: 221.2 83.2% 53.3%;
+  --ss-status-success: 142.1 76.2% 36.3%;
+  --ss-status-error: 0 84.2% 60.2%;
+  --ss-status-warning: 38 92.2% 50%;
+}
+
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+
+  /* Socket Studio Tokens - Dark Mode (Terminal Pro) */
+  --ss-bg-base: 222 47% 4%;
+  --ss-bg-surface: 222 47% 7%;
+  --ss-bg-elevated: 222 47% 11%;
+  --ss-bg-hover: 222 47% 15%;
+  --ss-border: 222 47% 25%;
+  --ss-text-main: 210 40% 98%;
+  --ss-text-muted: 215 20% 65%;
+  --ss-accent-blue: 217.2 91.2% 45%;
+  --ss-status-success: 142.1 70.6% 45.3%;
+  --ss-status-error: 0 72.2% 50.6%;
+  --ss-status-warning: 47.9 95.8% 51.8%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-ss-accent-blue/30;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2b2b2b;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #333333;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+button, a, .link {
+  cursor: pointer;
+}
