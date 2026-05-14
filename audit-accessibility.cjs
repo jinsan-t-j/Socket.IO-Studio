@@ -3,7 +3,7 @@ const path = require('path');
 
 const { chromium } = require('playwright');
 
-const BASE_URL = 'http://localhost:4174';
+const BASE_URL = 'http://localhost:4173';
 
 async function runAudit() {
   console.log('Starting Accessibility Audit for Socket Studio...');
