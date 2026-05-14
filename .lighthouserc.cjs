@@ -50,12 +50,20 @@ module.exports = {
   ci: {
     collect: {
       startServerCommand: "npm run preview -- --port 4173 --strictPort",
-      startServerReadyPattern: "Local:.*http",
-      startServerReadyTimeout: 120000,
+      startServerReadyPattern: "http://localhost:4173",
+      startServerReadyTimeout: 300000,
       numberOfRuns: 3,
       url: ["http://localhost:4173/"],
       chromePath: findChrome(),
-      chromeFlags: "--no-sandbox --headless=new --disable-gpu --ignore-certificate-errors --disable-dev-shm-usage --disable-setuid-sandbox --disable-software-rasterizer",
+      chromeFlags: [
+        "--no-sandbox",
+        "--headless=new",
+        "--disable-gpu",
+        "--ignore-certificate-errors",
+        "--disable-dev-shm-usage",
+        "--disable-setuid-sandbox",
+        "--disable-software-rasterizer"
+      ],
     },
     assert: {
       assertions: {
