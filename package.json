@@ -12,7 +12,7 @@
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --max-warnings=0 --fix",
     "preview": "vite preview",
-    "lighthouse": "npm run build && lhci autorun",
+    "lighthouse": "npm run build && CHROME_PATH=$(find ~/Library/Caches/ms-playwright -name \"Google Chrome for Testing\" -type f | head -n 1) lhci autorun",
     "test:a11y": "node audit-accessibility.cjs",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
