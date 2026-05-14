@@ -19,8 +19,6 @@ import type {
 } from "@/types/app";
 import { connectSocket, disconnectSocket, emitEvent } from "@/utils/socketManager";
 
-const STORAGE_KEY = "Socket.IO Studio.workspace.v2";
-
 function id(prefix: string) {
   return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
 }
@@ -177,10 +175,7 @@ async function requestPersistence() {
 }
 
 export const useAppStore = defineStore("app", {
-  persist: {
-    key: STORAGE_KEY,
-    storage: globalThis.window === undefined ? undefined : globalThis.localStorage,
-  },
+  persist: true,
   state: (): WorkspaceState => ({
     brand: "Socket.IO Studio",
     layoutDock: "right",
