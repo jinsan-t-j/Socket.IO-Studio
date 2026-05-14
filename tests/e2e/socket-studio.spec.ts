@@ -57,7 +57,7 @@ test.describe('Socket Studio E2E', () => {
     await expect(page.getByText('Connected', { exact: false })).toBeVisible();
 
     // Go to Events section
-    await page.getByRole('button', { name: 'Events' }).click();
+    await page.getByRole('tab', { name: 'Events' }).click();
     
     // Add emitter
     await page.getByRole('button', { name: '+ Add Emitter Preset' }).click();
@@ -79,7 +79,7 @@ test.describe('Socket Studio E2E', () => {
 
   test('should add listener and see events', async ({ page }) => {
     // Add listener BEFORE connecting to be sure
-    await page.getByRole('button', { name: 'Listeners' }).click();
+    await page.getByRole('tab', { name: 'Listeners' }).click();
     await page.getByRole('button', { name: '+ Add Listener' }).click();
     await page.getByPlaceholder('Event Name').last().fill('demo:welcome');
 
