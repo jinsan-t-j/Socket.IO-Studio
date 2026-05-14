@@ -29,7 +29,7 @@
           Disconnect
         </Button>
         
-        <Button variant="outline" class="border-ss-border text-ss-text-muted hover:text-white gap-2" title="Reset to default configuration" @click="$emit('reset-tab')">
+        <Button variant="outline" class="border-ss-border text-ss-text-muted hover:text-white gap-2" title="Reset to default configuration" aria-label="Reset request" @click="$emit('reset-tab')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
             <path d="M3 3v5h5"/>
@@ -65,7 +65,7 @@
           <label class="flex items-center gap-2 text-[10px] font-bold text-ss-text-muted uppercase tracking-wider whitespace-nowrap">
             Version
             <Select :model-value="String(tab.draft.version)" @update:model-value="(val: any) => updateCore('version', Number(val))">
-              <SelectTrigger class="h-8 w-20 bg-ss-bg-base border-ss-border text-ss-text-main text-xs">
+              <SelectTrigger class="h-8 w-20 bg-ss-bg-base border-ss-border text-ss-text-main text-xs" aria-label="Socket.IO version">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent class="bg-ss-bg-surface border-ss-border text-ss-text-main">
@@ -128,9 +128,9 @@
         <template v-if="activeSection === 'headers'">
           <div v-if="modeFor('headers') === 'form'" class="space-y-2">
             <div v-for="row in tab.draft.headers" :key="row.id" class="flex items-center gap-2 group">
-              <Checkbox :checked="row.enabled" @update:checked="(val: boolean) => $emit('toggle-header', row.id, !!val)" />
-              <Input :model-value="row.key" placeholder="Key" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-header', row.id, { key: String(val) })" />
-              <Input :model-value="row.value" placeholder="Value" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-header', row.id, { value: String(val) })" />
+              <Checkbox :checked="row.enabled" aria-label="Enable header" @update:checked="(val: boolean) => $emit('toggle-header', row.id, !!val)" />
+              <Input :model-value="row.key" placeholder="Key" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" aria-label="Header key" @update:model-value="(val: string | number) => $emit('update-header', row.id, { key: String(val) })" />
+              <Input :model-value="row.value" placeholder="Value" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" aria-label="Header value" @update:model-value="(val: string | number) => $emit('update-header', row.id, { value: String(val) })" />
               <Button variant="ghost" size="icon" class="h-9 w-9 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Remove header" @click="$emit('remove-header', row.id)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M18 6L6 18M6 6l12 12"/>
@@ -145,9 +145,9 @@
         <template v-else-if="activeSection === 'query'">
           <div v-if="modeFor('query') === 'form'" class="space-y-2">
             <div v-for="row in tab.draft.queryParams" :key="row.id" class="flex items-center gap-2 group">
-              <Checkbox :checked="row.enabled" @update:checked="(val: boolean) => $emit('toggle-query-enabled', row.id, !!val)" />
-              <Input :model-value="row.key" placeholder="Key" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-query', row.id, { key: String(val) })" />
-              <Input :model-value="row.value" placeholder="Value" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-query', row.id, { value: String(val) })" />
+              <Checkbox :checked="row.enabled" aria-label="Enable query parameter" @update:checked="(val: boolean) => $emit('toggle-query-enabled', row.id, !!val)" />
+              <Input :model-value="row.key" placeholder="Key" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" aria-label="Query key" @update:model-value="(val: string | number) => $emit('update-query', row.id, { key: String(val) })" />
+              <Input :model-value="row.value" placeholder="Value" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" aria-label="Query value" @update:model-value="(val: string | number) => $emit('update-query', row.id, { value: String(val) })" />
               <Button variant="ghost" size="icon" class="h-9 w-9 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Remove query parameter" @click="$emit('remove-query', row.id)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M18 6L6 18M6 6l12 12"/>
@@ -260,6 +260,7 @@
               size="sm" 
               class="absolute bottom-2 right-4 h-7 px-2 text-[10px] bg-ss-bg-surface/80 hover:bg-ss-bg-surface border border-ss-border text-ss-text-muted hover:text-white opacity-0 group-hover/editor:opacity-100 transition-opacity"
               title="Beautify JSON"
+              aria-label="Beautify options JSON"
               @click="beautifyOptions"
             >
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="mr-1.5">
@@ -274,8 +275,8 @@
           <div class="space-y-3">
             <div v-for="listener in tab.draft.listeners" :key="listener.id" class="flex items-center gap-3 bg-ss-bg-surface/30 p-2 pl-3 rounded-md border border-ss-border group">
               <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-[0_0_8px_rgba(0,0,0,0.5)]" :style="{ backgroundColor: listener.color }" />
-              <Input :model-value="listener.eventName" placeholder="Event Name" class="flex-1 bg-transparent border-none text-ss-text-main h-8 font-medium placeholder:font-normal" @update:model-value="(val: string | number) => $emit('update-listener', listener.id, { eventName: String(val) })" />
-              <Checkbox :checked="listener.enabled" @update:checked="(val: boolean) => $emit('update-listener', listener.id, { enabled: !!val })" />
+              <Input :model-value="listener.eventName" placeholder="Event Name" class="flex-1 bg-transparent border-none text-ss-text-main h-8 font-medium placeholder:font-normal" aria-label="Event name" @update:model-value="(val: string | number) => $emit('update-listener', listener.id, { eventName: String(val) })" />
+              <Checkbox :checked="listener.enabled" aria-label="Enable listener" @update:checked="(val: boolean) => $emit('update-listener', listener.id, { enabled: !!val })" />
               <Button variant="ghost" size="icon" class="h-8 w-8 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Remove listener" @click="$emit('remove-listener', listener.id)">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M18 6L6 18M6 6l12 12"/>
@@ -326,7 +327,7 @@
         <template v-else-if="activeSection === 'raw'">
           <div class="flex flex-col gap-4 h-full">
             <div class="flex justify-end gap-2">
-              <Button variant="secondary" size="sm" class="bg-ss-bg-surface hover:bg-ss-bg-surface/80 text-white" @click="beautifyRaw">
+              <Button variant="secondary" size="sm" class="bg-ss-bg-surface hover:bg-ss-bg-surface/80 text-white" aria-label="Beautify payload JSON" @click="beautifyRaw">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="mr-2">
                   <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
                 </svg>

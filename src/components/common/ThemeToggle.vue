@@ -4,6 +4,7 @@
     size="icon" 
     class="h-8 w-8 text-ss-text-muted hover:text-ss-accent-blue hover:bg-ss-accent-blue/10 transition-all"
     :title="`Switch to ${nextTheme} mode`" 
+    :aria-label="`Switch to ${nextTheme} mode`"
     @click="toggleTheme"
   >
     <svg v-if="currentTheme === 'light'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

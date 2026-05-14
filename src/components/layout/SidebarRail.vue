@@ -115,6 +115,7 @@
             ref="renameInput" 
             v-model="renameValue"
             class="bg-ss-bg-base border-ss-border text-ss-text-main"
+            aria-label="Rename request"
             @keyup.enter="executeRename"
           />
         </div>

@@ -71,7 +71,7 @@ class="w-2 h-2 rounded-full shrink-0" :class="[
 
     <div class="flex items-center gap-2">
       <slot name="extra" />
-      <Button variant="ghost" size="icon" class="h-8 w-8 text-ss-text-muted hover:text-ss-text-main" :title="`Dock ${dockLabel}`" @click="$emit('toggle-dock')">
+      <Button variant="ghost" size="icon" class="h-8 w-8 text-ss-text-muted hover:text-ss-text-main" :title="`Dock ${dockLabel}`" :aria-label="`Dock ${dockLabel}`" @click="$emit('toggle-dock')">
         <svg v-if="dock === 'right'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="3" width="18" height="18" rx="2"/>
           <path d="M15 3v18"/>
