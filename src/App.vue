@@ -105,16 +105,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from "vue";
+import { computed, onMounted, onUnmounted, defineAsyncComponent } from "vue";
 
 import ThemeToggle from "@/components/common/ThemeToggle.vue";
-import ConnectionWorkbench from "@/components/connection/ConnectionWorkbench.vue";
 import AppHeader from "@/components/layout/AppHeader.vue";
 import SidebarRail from "@/components/layout/SidebarRail.vue";
 import StatusBar from "@/components/layout/StatusBar.vue";
-import LogConsole from "@/components/metrics/LogConsole.vue";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/stores/app.store";
+
+const ConnectionWorkbench = defineAsyncComponent(() => import("@/components/connection/ConnectionWorkbench.vue"));
+const LogConsole = defineAsyncComponent(() => import("@/components/metrics/LogConsole.vue"));
 
 const store = useAppStore();
 onMounted(() => {
