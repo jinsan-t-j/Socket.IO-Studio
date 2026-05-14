@@ -1,0 +1,70 @@
+{
+  "name": "Socket Studio-v2",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:client": "vite",
+    "dev:server": "node scripts/demo-server.mjs",
+    "build": "vue-tsc -b && vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --max-warnings=0 --fix",
+    "preview": "vite preview",
+    "lighthouse": "npm run build && lhci autorun",
+    "test:a11y": "node audit-accessibility.cjs",
+    "test:e2e": "playwright test",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.0",
+    "@vueuse/core": "^14.3.0",
+    "class-variance-authority": "^0.7.1",
+    "pinia": "^3.0.3",
+    "reka-ui": "^2.9.7",
+    "socket.io-client": "^4.8.1",
+    "vue": "^3.5.13",
+    "qrcode": "^1.5.4",
+    "axios": "^1.16.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "clsx": "^2.1.1",
+    "lucide-vue-next": "^1.0.0",
+    "pinia-plugin-persistedstate": "^4.7.1",
+    "radix-vue": "^1.9.17",
+    "shadcn-vue": "^2.7.2",
+    "socket.io": "^4.8.1",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^4.3.0",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vue-tsc": "^2.2.10",
+    "@eslint/js": "^10.0.1",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.59.1",
+    "@sonar/scan": "^4.3.6",
+    "@types/node": "^25.6.2",
+    "eslint": "^10.3.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import-x": "^4.16.2",
+    "eslint-plugin-vue": "^10.9.1",
+    "globals": "^17.6.0",
+    "husky": "^9.1.7",
+    "lighthouse": "^13.3.0",
+    "lint-staged": "^17.0.4",
+    "playwright": "^1.59.1",
+    "prettier": "^3.8.3",
+    "puppeteer": "^24.43.0",
+    "typescript-eslint": "^8.59.2",
+    "vue-eslint-parser": "^10.4.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,vue}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
