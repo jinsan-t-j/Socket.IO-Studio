@@ -84,9 +84,8 @@
           </div>
         </div>
 
-        <div 
-          class="bg-transparent hover:bg-ss-accent-blue/50 transition-colors z-10" 
-          role="separator"
+        <hr 
+          class="bg-transparent hover:bg-ss-accent-blue/50 transition-colors z-10 border-none" 
           aria-label="Resize panels"
           :aria-orientation="store.layoutDock === 'right' ? 'vertical' : 'horizontal'"
           :class="store.layoutDock === 'right' ? 'w-1 cursor-col-resize h-full' : 'h-1 cursor-row-resize w-full'"
