@@ -5,16 +5,18 @@
       <div class="text-sm font-semibold text-ss-text-main">{{ brand }}</div>
     </div>
 
-    <div class="flex flex-1 items-center h-full px-4 overflow-x-auto no-scrollbar" role="tablist">
-      <button
+    <div class="flex flex-1 items-center h-full px-4 overflow-x-auto no-scrollbar" role="tablist" aria-label="Open requests">
+      <div
         v-for="tab in tabs"
         :key="tab.id"
-        type="button"
         role="tab"
+        tabindex="0"
         :aria-selected="tab.id === activeTabId"
         class="group flex items-center gap-2 px-3 h-full cursor-pointer border-r border-ss-border hover:bg-ss-bg-surface transition-colors relative min-w-[120px] max-w-[200px]"
         :class="{ 'bg-ss-bg-surface': tab.id === activeTabId }"
         @click="$emit('select-tab', tab.id)"
+        @keydown.enter.prevent="$emit('select-tab', tab.id)"
+        @keydown.space.prevent="$emit('select-tab', tab.id)"
         @dblclick="startRename(tab)"
       >
         <span
@@ -63,14 +65,14 @@
         </div>
 
         <div v-if="tab.id === activeTabId" class="absolute bottom-0 left-0 right-0 h-0.5 bg-ss-accent-blue" aria-hidden="true" />
-      </button>
-
-      <Button variant="ghost" size="icon" class="h-8 w-8 ml-2 text-ss-text-muted hover:text-ss-text-main" aria-label="Create new request" @click="$emit('new-tab')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M12 5v14M5 12h14"/>
-        </svg>
-      </Button>
+      </div>
     </div>
+
+    <Button variant="ghost" size="icon" class="h-8 w-8 text-ss-text-muted hover:text-ss-text-main shrink-0" aria-label="Create new request" @click="$emit('new-tab')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M12 5v14M5 12h14"/>
+      </svg>
+    </Button>
 
     <div class="flex items-center gap-2">
       <slot name="extra" />

@@ -105,7 +105,7 @@
       :aria-labelledby="`tab-${activeSection}`"
     >
       <div class="space-y-1">
-        <h3 class="text-base font-semibold text-white">{{ activeSectionLabel }}</h3>
+        <h3 class="text-base font-semibold text-ss-text-main">{{ activeSectionLabel }}</h3>
         <p class="text-xs text-ss-text-muted">{{ activeSectionDescription }}</p>
       </div>
 

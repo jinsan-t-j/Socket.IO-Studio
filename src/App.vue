@@ -72,7 +72,7 @@
           <div class="max-w-md flex flex-col items-center gap-6">
             <img src="/images/empty-state.png" alt="Empty Workspace" class="w-72 h-72 object-contain opacity-80 drop-shadow-[0_0_20px_rgba(59,130,246,0.2)]" />
             <div class="space-y-2">
-              <h2 class="text-2xl font-bold text-white">Ready to explore?</h2>
+              <h2 class="text-2xl font-bold text-ss-text-main">Ready to explore?</h2>
               <p class="text-ss-text-muted text-sm leading-relaxed">Select a saved request from the sidebar or create a new one to begin your socket session.</p>
             </div>
             <Button size="lg" class="bg-ss-accent-blue hover:bg-ss-accent-blue/90 text-white gap-2" @click="store.createTab">
