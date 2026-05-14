@@ -16,6 +16,7 @@
           variant="ghost" 
           size="icon" 
           class="h-6 w-6 text-ss-text-muted hover:text-ss-text-main"
+          aria-label="Create new session"
           @click="$emit('new-session')"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -63,6 +64,7 @@
                   variant="ghost" 
                   size="icon" 
                   class="h-6 w-6 text-ss-text-muted opacity-0 group-hover:opacity-100 transition-opacity"
+                  aria-label="Session options"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>

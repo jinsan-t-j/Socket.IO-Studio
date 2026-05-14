@@ -23,6 +23,7 @@
           variant="ghost" 
           size="icon" 
           class="h-7 w-7 text-ss-text-muted hover:text-ss-status-error hover:bg-ss-status-error/10 transition-colors"
+          aria-label="Clear console"
           title="Clear console"
           @click="$emit('clear')"
         >
@@ -35,11 +36,11 @@
 
     <!-- Log List -->
     <div class="flex-1 overflow-y-auto no-scrollbar font-mono">
-      <div v-if="logs.length === 0" class="flex flex-col items-center justify-center h-full text-ss-text-muted opacity-40 py-12">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mb-4">
+      <div v-if="logs.length === 0" class="flex flex-col items-center justify-center h-full text-ss-text-muted py-12">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mb-4 opacity-40">
           <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/>
         </svg>
-        <span class="text-xs uppercase tracking-widest">No logs to display</span>
+        <span class="text-xs uppercase tracking-widest font-semibold">No logs to display</span>
       </div>
 
       <div 

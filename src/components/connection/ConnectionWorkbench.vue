@@ -84,6 +84,9 @@
         v-for="section in sections"
         :key="section.key"
         type="button"
+        role="tab"
+        :aria-selected="activeSection === section.key"
+        :aria-controls="`panel-${section.key}`"
         class="px-4 py-3 text-sm font-medium transition-colors border-b-2 relative -mb-[2px] whitespace-nowrap"
         :class="activeSection === section.key 
           ? 'text-ss-accent-blue border-ss-accent-blue' 
@@ -128,7 +131,7 @@
               <Checkbox :checked="row.enabled" @update:checked="(val: boolean) => $emit('toggle-header', row.id, !!val)" />
               <Input :model-value="row.key" placeholder="Key" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-header', row.id, { key: String(val) })" />
               <Input :model-value="row.value" placeholder="Value" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-header', row.id, { value: String(val) })" />
-              <Button variant="ghost" size="icon" class="h-9 w-9 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" @click="$emit('remove-header', row.id)">
+              <Button variant="ghost" size="icon" class="h-9 w-9 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Remove header" @click="$emit('remove-header', row.id)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M18 6L6 18M6 6l12 12"/>
                 </svg>
@@ -145,7 +148,7 @@
               <Checkbox :checked="row.enabled" @update:checked="(val: boolean) => $emit('toggle-query-enabled', row.id, !!val)" />
               <Input :model-value="row.key" placeholder="Key" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-query', row.id, { key: String(val) })" />
               <Input :model-value="row.value" placeholder="Value" class="flex-1 bg-ss-bg-base border-ss-border text-ss-text-main h-9" @update:model-value="(val: string | number) => $emit('update-query', row.id, { value: String(val) })" />
-              <Button variant="ghost" size="icon" class="h-9 w-9 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" @click="$emit('remove-query', row.id)">
+              <Button variant="ghost" size="icon" class="h-9 w-9 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Remove query parameter" @click="$emit('remove-query', row.id)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M18 6L6 18M6 6l12 12"/>
                 </svg>
@@ -273,7 +276,7 @@
               <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-[0_0_8px_rgba(0,0,0,0.5)]" :style="{ backgroundColor: listener.color }" />
               <Input :model-value="listener.eventName" placeholder="Event Name" class="flex-1 bg-transparent border-none text-ss-text-main h-8 font-medium placeholder:font-normal" @update:model-value="(val: string | number) => $emit('update-listener', listener.id, { eventName: String(val) })" />
               <Checkbox :checked="listener.enabled" @update:checked="(val: boolean) => $emit('update-listener', listener.id, { enabled: !!val })" />
-              <Button variant="ghost" size="icon" class="h-8 w-8 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" @click="$emit('remove-listener', listener.id)">
+              <Button variant="ghost" size="icon" class="h-8 w-8 text-ss-text-muted hover:text-ss-status-error opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Remove listener" @click="$emit('remove-listener', listener.id)">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M18 6L6 18M6 6l12 12"/>
                 </svg>
@@ -289,7 +292,7 @@
               <div class="flex items-center gap-3 p-3 border-b border-ss-border bg-ss-bg-surface/50">
                 <Input :model-value="emitter.eventName" placeholder="Event Name" class="flex-1 bg-transparent border-none text-ss-text-main h-8 font-semibold" @update:model-value="(val: string | number) => $emit('update-emitter', emitter.id, { eventName: String(val) })" />
                 <Button variant="default" size="sm" class="bg-ss-accent-blue hover:bg-ss-accent-blue/90 text-white h-8" @click="$emit('emit-event', emitter)">Emit</Button>
-                <Button variant="ghost" size="icon" class="h-8 w-8 text-ss-text-muted hover:text-ss-status-error" @click="$emit('remove-emitter', emitter.id)">
+                <Button variant="ghost" size="icon" class="h-8 w-8 text-ss-text-muted hover:text-ss-status-error" aria-label="Remove emitter" @click="$emit('remove-emitter', emitter.id)">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 6L6 18M6 6l12 12"/>
                   </svg>

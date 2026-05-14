@@ -9,6 +9,8 @@
       <div
         v-for="tab in tabs"
         :key="tab.id"
+        role="tab"
+        :aria-selected="tab.id === activeTabId"
         class="group flex items-center gap-2 px-3 h-full cursor-pointer border-r border-ss-border hover:bg-ss-bg-surface transition-colors relative min-w-[120px] max-w-[200px]"
         :class="{ 'bg-ss-bg-surface': tab.id === activeTabId }"
         @click="$emit('select-tab', tab.id)"
