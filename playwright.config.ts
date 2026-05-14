@@ -22,11 +22,13 @@ export default defineConfig({
       command: process.env.CI ? 'npm run preview' : 'npm run dev:client',
       url: process.env.CI ? 'http://localhost:4173' : 'http://localhost:5173',
       reuseExistingServer: !process.env.CI,
+      timeout: 120000,
     },
     {
       command: 'npm run dev:server',
       url: 'http://localhost:5001',
       reuseExistingServer: !process.env.CI,
+      timeout: 120000,
     }
   ],
 });
