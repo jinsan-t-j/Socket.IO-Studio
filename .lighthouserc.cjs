@@ -54,16 +54,13 @@ module.exports = {
       startServerReadyTimeout: 300000,
       numberOfRuns: 3,
       url: ["http://localhost:4173/"],
-      chromePath: findChrome(),
-      chromeFlags: [
-        "--no-sandbox",
-        "--headless=new",
-        "--disable-gpu",
-        "--ignore-certificate-errors",
-        "--disable-dev-shm-usage",
-        "--disable-setuid-sandbox",
-        "--disable-software-rasterizer"
-      ],
+      chromePath: (() => {
+        const path = findChrome();
+        // eslint-disable-next-line no-console
+        console.log(`LHCI: Using Chrome at ${path}`);
+        return path;
+      })(),
+      chromeFlags: "--no-sandbox --headless=new --disable-gpu --ignore-certificate-errors --disable-dev-shm-usage --disable-setuid-sandbox --disable-software-rasterizer",
     },
     assert: {
       assertions: {
