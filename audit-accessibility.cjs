@@ -6,7 +6,7 @@ const { chromium } = require('playwright');
 const BASE_URL = 'http://localhost:4173';
 
 async function runAudit() {
-  console.log('Starting Accessibility Audit for Socket Studio...');
+  console.log('Starting Accessibility Audit for Socket.IO Studio...');
   const browser = await chromium.launch({ headless: true });
   
   const context = await browser.newContext({

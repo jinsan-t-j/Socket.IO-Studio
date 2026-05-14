@@ -34,11 +34,11 @@ function toggleTheme() {
     document.documentElement.classList.remove("dark");
   }
   
-  localStorage.setItem("Socket Studio.theme", newTheme);
+  localStorage.setItem("Socket.IO Studio.theme", newTheme);
 }
 
 onMounted(() => {
-  const savedTheme = localStorage.getItem("Socket Studio.theme") || "dark";
+  const savedTheme = localStorage.getItem("Socket.IO Studio.theme") || "dark";
   currentTheme.value = savedTheme;
   if (savedTheme === "dark") {
     document.documentElement.classList.add("dark");

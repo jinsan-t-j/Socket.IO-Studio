@@ -19,7 +19,7 @@ import type {
 } from "@/types/app";
 import { connectSocket, disconnectSocket, emitEvent } from "@/utils/socketManager";
 
-const STORAGE_KEY = "Socket Studio.workspace.v2";
+const STORAGE_KEY = "Socket.IO Studio.workspace.v2";
 
 function id(prefix: string) {
   return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
@@ -182,7 +182,7 @@ export const useAppStore = defineStore("app", {
     storage: localStorage,
   },
   state: (): WorkspaceState => ({
-    brand: "Socket Studio",
+    brand: "Socket.IO Studio",
     layoutDock: "right",
     sessions: defaultSessions,
     tabs: defaultTabs,
@@ -581,7 +581,7 @@ export const useAppStore = defineStore("app", {
       const blob = new Blob([payload], { type: "application/json" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `${tab.name || "Socket Studio-session"}.Socket Studio.json`;
+      link.download = `${tab.name || "Socket.IO Studio-session"}.Socket.IO Studio.json`;
       link.click();
       URL.revokeObjectURL(link.href);
     },

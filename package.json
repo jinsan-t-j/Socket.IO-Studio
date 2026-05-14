@@ -1,5 +1,5 @@
 {
-  "name": "Socket Studio-v2",
+  "name": "Socket.IO Studio-v2",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -8,6 +8,7 @@
     "dev:client": "vite",
     "dev:server": "node scripts/demo-server.mjs",
     "build": "vue-tsc -b && vite build",
+    "build:ssg": "vue-tsc -b && vite-ssg build",
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --max-warnings=0 --fix",
@@ -31,7 +32,9 @@
     "qrcode": "^1.5.4",
     "reka-ui": "^2.9.7",
     "socket.io-client": "^4.8.1",
-    "vue": "^3.5.13"
+    "vite-ssg": "^28.3.0",
+    "vue": "^3.5.13",
+    "vue-router": "^5.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

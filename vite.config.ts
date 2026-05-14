@@ -1,6 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
+import "vite-ssg";
 
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
@@ -15,11 +16,18 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ["vue", "pinia", "@vueuse/core"],
-          socket: ["socket.io-client"],
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("socket.io-client")) return "socket";
+            if (id.includes("vue") || id.includes("pinia") || id.includes("@vueuse")) return "vendor";
+            return "deps";
+          }
         },
       },
     },
+  },
+  ssgOptions: {
+    script: "async",
+    formatting: "minify",
   },
 });

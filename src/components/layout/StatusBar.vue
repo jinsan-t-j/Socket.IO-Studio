@@ -3,7 +3,7 @@
     <div class="flex items-center gap-4">
       <div class="flex items-center gap-2">
         <span class="text-ss-accent-blue animate-pulse text-[8px]">●</span>
-        <span class="font-medium tracking-tight">Socket Studio Ready</span>
+        <span class="font-medium tracking-tight">Socket.IO Studio Ready</span>
       </div>
     </div>
     <div class="flex items-center gap-6">

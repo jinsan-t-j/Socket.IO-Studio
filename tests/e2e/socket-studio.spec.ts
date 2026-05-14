@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Socket Studio E2E', () => {
+test.describe('Socket.IO Studio E2E', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
   test('should load the application and show initial tabs', async ({ page }) => {
-    await expect(page).toHaveTitle(/Socket Studio/);
+    await expect(page).toHaveTitle(/Socket.IO Studio/);
     const header = page.getByRole('banner');
     await expect(header.getByText('Example Session')).toBeVisible();
     await expect(header.getByText('New request')).toBeVisible();
