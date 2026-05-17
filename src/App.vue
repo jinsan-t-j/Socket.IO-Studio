@@ -13,8 +13,8 @@
       @rename-tab="store.renameTab"
       @close-tab="store.closeTab"
       @toggle-dock="store.toggleDock"
-      @connect-tab="store.connectActiveTab"
-      @disconnect-tab="store.disconnectActiveTab"
+      @connect-tab="store.connectTab"
+      @disconnect-tab="store.disconnectTab"
     >
       <template #extra>
         <ThemeToggle />
@@ -39,17 +39,19 @@
       <div class="flex-1 flex overflow-hidden relative" :class="{ 'flex-col': store.layoutDock === 'bottom' }">
         <ConnectionWorkbench
           v-if="store.activeTab"
+          :key="store.activeTabId"
           :tab="store.activeTab"
           @update-core="store.updateConnectionField"
-          @toggle-mode="store.updateEditorMode($event.section, $event.mode)"
+          @toggle-mode="(data) => store.updateEditorMode(data.section, data.mode, data.tabId)"
           @update-header="store.updateHeader"
           @toggle-header="store.toggleHeader"
           @update-query="store.updateQuery"
-          @toggle-query-enabled="(id, enabled) => store.updateQuery(id, { enabled })"
+          @toggle-query-enabled="(id, enabled, tabId) => store.updateQuery(id, { enabled }, tabId)"
           @remove-header="store.removeHeaderRow"
           @remove-query="store.removeQueryRow"
           @update-auth="store.updateAuth"
           @update-options="store.updateOptions"
+          @toggle-transport="store.toggleTransport"
           @update-scripts="store.updateScripts"
           @replace-json="store.replaceDraftFromJson"
           @replace-full-draft="store.replaceFullDraft"
@@ -62,8 +64,8 @@
           @add-query="store.addQueryRow"
           @add-listener="store.addListener"
           @add-emitter="store.addEmitter"
-          @connect-tab="store.connectActiveTab"
-          @disconnect-tab="store.disconnectActiveTab"
+          @connect-tab="store.connectTab"
+          @disconnect-tab="store.disconnectTab"
           @reset-tab="store.resetActiveTab"
           @save-tab="store.saveActiveTabAsFile"
         />

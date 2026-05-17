@@ -3,7 +3,6 @@ import { toRaw } from "vue";
 
 import type {
   AuthConfig,
-  ConnectionRuntime,
   DockPosition,
   KeyValueRow,
   ListenerRule,
@@ -343,36 +342,36 @@ export const useAppStore = defineStore("app", {
       this.layoutDock = this.layoutDock === "right" ? "bottom" : "right";
 
     },
-    updateConnectionField(field: keyof Pick<SocketSessionDraft, "url" | "path" | "namespace" | "version">, value: string | number) {
-      const tab = this.activeTab;
-      if (!tab) return;
-      if (field === "version") {
-        tab.draft.version = value as SocketSessionDraft["version"];
-      } else {
-        (tab.draft as any)[field] = value; // eslint-disable-line @typescript-eslint/no-explicit-any
+    updateConnectionField(field: keyof Pick<SocketSessionDraft, "url" | "path" | "namespace" | "version">, value: string | number, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
+      if (tab) {
+        tab.draft = {
+          ...tab.draft,
+          [field]: value
+        };
+        this.autosave(tabId);
       }
-      this.autosave();
     },
-    updateEditorMode(section: keyof SocketSessionDraft["editorModes"], mode: EditorMode) {
-      const tab = this.activeTab;
+    updateEditorMode(section: keyof SocketSessionDraft["editorModes"], mode: EditorMode, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
-      tab.draft.editorModes[section] = mode;
-      this.autosave();
+      tab.draft.editorModes = { ...tab.draft.editorModes, [section]: mode };
+      this.autosave(tabId);
     },
-    addHeaderRow() {
-      const tab = this.activeTab;
+    addHeaderRow(tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       tab.draft.headers.push(createKeyValueRow());
-      this.autosave();
+      this.autosave(tabId);
     },
-    addQueryRow() {
-      const tab = this.activeTab;
+    addQueryRow(tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       tab.draft.queryParams.push(createKeyValueRow());
-      this.autosave();
+      this.autosave(tabId);
     },
-    addListener() {
-      const tab = this.activeTab;
+    addListener(tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       tab.draft.listeners.unshift({
         id: id("listener"),
@@ -380,10 +379,10 @@ export const useAppStore = defineStore("app", {
         enabled: true,
         color: "#3b82f6",
       });
-      this.autosave();
+      this.autosave(tabId);
     },
-    addEmitter() {
-      const tab = this.activeTab;
+    addEmitter(tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       tab.draft.emitters.unshift({
         id: id("emitter"),
@@ -392,95 +391,103 @@ export const useAppStore = defineStore("app", {
         volatile: false,
         compress: false,
       });
-      this.autosave();
+      this.autosave(tabId);
     },
-    toggleHeader(idValue: string, enabled: boolean) {
-      const tab = this.activeTab;
+    toggleHeader(idValue: string, enabled: boolean, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       const row = tab?.draft.headers.find((item) => item.id === idValue);
       if (!row || !tab) return;
       row.enabled = enabled;
-      this.autosave();
+      this.autosave(tabId);
     },
-    updateHeader(idValue: string, patch: Partial<KeyValueRow>) {
-      const tab = this.activeTab;
-      const row = tab?.draft.headers.find((item) => item.id === idValue);
-      if (!row || !tab) return;
-      Object.assign(row, patch);
-      this.autosave();
+    updateHeader(idValue: string, patch: Partial<KeyValueRow>, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
+      const header = tab?.draft.headers.find(h => h.id === idValue);
+      if (header && tab) {
+        const index = tab.draft.headers.indexOf(header);
+        tab.draft.headers[index] = { ...header, ...patch };
+        this.autosave(tabId);
+      }
     },
-    updateQuery(idValue: string, patch: Partial<KeyValueRow>) {
-      const tab = this.activeTab;
-      const row = tab?.draft.queryParams.find((item) => item.id === idValue);
-      if (!row || !tab) return;
-      Object.assign(row, patch);
-      this.autosave();
+    updateQuery(idValue: string, patch: Partial<KeyValueRow>, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
+      const query = tab?.draft.queryParams.find(q => q.id === idValue);
+      if (query && tab) {
+        const index = tab.draft.queryParams.indexOf(query);
+        tab.draft.queryParams[index] = { ...query, ...patch };
+        this.autosave(tabId);
+      }
     },
-    updateAuth(patch: Partial<AuthConfig>) {
-      const tab = this.activeTab;
+    updateAuth(patch: Partial<AuthConfig>, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
-      Object.assign(tab.draft.auth, patch);
-      this.autosave();
+      tab.draft.auth = { ...tab.draft.auth, ...patch };
+      this.autosave(tabId);
     },
-    updateOptions(patch: Partial<SocketOptionsConfig>) {
-      const tab = this.activeTab;
+    updateOptions(patch: Partial<SocketOptionsConfig>, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
-      Object.assign(tab.draft.options, patch);
-      this.autosave();
+      tab.draft.options = { ...tab.draft.options, ...patch };
+      this.autosave(tabId);
     },
-    updateScripts(patch: Partial<ScriptConfig>) {
-      const tab = this.activeTab;
+    updateScripts(patch: Partial<ScriptConfig>, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
-      Object.assign(tab.draft.scripts, patch);
-      this.autosave();
+      tab.draft.scripts = { ...tab.draft.scripts, ...patch };
+      this.autosave(tabId);
     },
-    updateListener(idValue: string, patch: Partial<ListenerRule>) {
-      const tab = this.activeTab;
-      const listener = tab?.draft.listeners.find((item) => item.id === idValue);
-      if (!listener || !tab) return;
-      Object.assign(listener, patch);
-      this.autosave();
+    updateListener(idValue: string, patch: Partial<ListenerRule>, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
+      const listener = tab?.draft.listeners.find(l => l.id === idValue);
+      if (listener && tab) {
+        const index = tab.draft.listeners.indexOf(listener);
+        tab.draft.listeners[index] = { ...listener, ...patch };
+        this.autosave(tabId);
+      }
     },
-    updateEmitter(idValue: string, patch: Partial<EmitPreset>) {
-      const tab = this.activeTab;
-      const emitter = tab?.draft.emitters.find((item) => item.id === idValue);
-      if (!emitter || !tab) return;
-      Object.assign(emitter, patch);
-      this.autosave();
+    updateEmitter(idValue: string, patch: Partial<EmitPreset>, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
+      const emitter = tab?.draft.emitters.find(e => e.id === idValue);
+      if (emitter && tab) {
+        const index = tab.draft.emitters.indexOf(emitter);
+        tab.draft.emitters[index] = { ...emitter, ...patch };
+        this.autosave(tabId);
+      }
     },
-    removeEmitter(idValue: string) {
-      const tab = this.activeTab;
+    removeEmitter(idValue: string, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       const index = tab.draft.emitters.findIndex((item) => item.id === idValue);
       if (index !== -1) {
         tab.draft.emitters.splice(index, 1);
-        this.autosave();
+        this.autosave(tabId);
       }
     },
-    removeHeaderRow(idValue: string) {
-      const tab = this.activeTab;
+    removeHeaderRow(idValue: string, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       const index = tab.draft.headers.findIndex((item) => item.id === idValue);
       if (index !== -1) {
         tab.draft.headers.splice(index, 1);
-        this.autosave();
+        this.autosave(tabId);
       }
     },
-    removeQueryRow(idValue: string) {
-      const tab = this.activeTab;
+    removeQueryRow(idValue: string, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       const index = tab.draft.queryParams.findIndex((item) => item.id === idValue);
       if (index !== -1) {
         tab.draft.queryParams.splice(index, 1);
-        this.autosave();
+        this.autosave(tabId);
       }
     },
-    removeListener(idValue: string) {
-      const tab = this.activeTab;
+    removeListener(idValue: string, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       const index = tab.draft.listeners.findIndex((item) => item.id === idValue);
       if (index !== -1) {
         tab.draft.listeners.splice(index, 1);
-        this.autosave();
+        this.autosave(tabId);
       }
     },
     emitActiveTabEvent(emitter: EmitPreset) {
@@ -490,45 +497,51 @@ export const useAppStore = defineStore("app", {
       emitEvent(tab.id, emitter.eventName, emitter.payload, emitter.volatile, emitter.compress);
       this.log("tab", "EMIT", `${emitter.eventName}: ${emitter.payload}`, tab.id);
     },
-    toggleTransport(transport: SocketTransport, enabled: boolean) {
-      const tab = this.activeTab;
+    toggleTransport(transport: SocketTransport, enabled: boolean, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       const current = new Set(tab.draft.options.transports);
       if (enabled) current.add(transport);
       else current.delete(transport);
-      tab.draft.options.transports = Array.from(current);
-      if (tab.draft.options.transports.length === 0) {
-        tab.draft.options.transports = ["websocket"];
-      }
-      this.autosave();
+      tab.draft.options = {
+        ...tab.draft.options,
+        transports: Array.from(current)
+      };
+      this.autosave(tabId);
     },
-    replaceDraftFromJson(section: "headers" | "queryParams" | "auth" | "options" | "scripts", raw: string) {
-      const tab = this.activeTab;
+    replaceDraftFromJson(section: "headers" | "queryParams" | "auth" | "options" | "scripts", raw: string, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       try {
         if (section === "headers" || section === "queryParams") {
           const parsed = JSON.parse(raw) as KeyValueRow[];
-          tab.draft[section] = parsed.map((item) => ({ ...item, id: item.id || id("kv"), enabled: item.enabled ?? true }));
+          tab.draft = {
+            ...tab.draft,
+            [section]: parsed.map((item) => ({ ...item, id: item.id || id("kv"), enabled: item.enabled ?? true }))
+          };
         } else {
-          tab.draft[section] = JSON.parse(raw);
+          tab.draft = {
+            ...tab.draft,
+            [section]: JSON.parse(raw)
+          };
         }
-        this.autosave();
+        this.autosave(tabId);
       } catch (error) {
         this.log("error", "Invalid JSON", error instanceof Error ? error.message : "Unable to parse JSON.", tab.id);
       }
     },
-    resetActiveTab() {
-      const tab = this.activeTab;
+    resetActiveTab(tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       tab.draft = createDraft();
-      this.autosave();
+      this.autosave(tabId);
     },
-    replaceFullDraft(raw: string) {
-      const tab = this.activeTab;
+    replaceFullDraft(raw: string, tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       try {
         tab.draft = JSON.parse(raw);
-        this.autosave();
+        this.autosave(tabId);
       } catch (error) {
         this.log("error", "Invalid Config JSON", error instanceof Error ? error.message : "Unable to parse JSON.", tab.id);
       }
@@ -555,8 +568,8 @@ export const useAppStore = defineStore("app", {
         this.sessions.unshift(session);
       }
     },
-    autosave() {
-      const tab = this.activeTab;
+    autosave(tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       tab.dirty = true;
     },
@@ -580,19 +593,27 @@ export const useAppStore = defineStore("app", {
       link.click();
       URL.revokeObjectURL(link.href);
     },
-    connectActiveTab() {
-      const tab = this.activeTab;
+    connectTab(tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       if (tab.runtime.status === "connected" || tab.runtime.status === "connecting") return;
 
       // 1. Check for Mixed Content Incompatibility
       const url = tab.draft.url;
-      if (globalThis.window?.location.protocol === 'https:' && url.startsWith('http:')) {
+      const isLocalhost = url.includes("localhost") || url.includes("127.0.0.1");
+
+      if (globalThis.window?.location.protocol === "https:" && (url.startsWith("http:") || url.startsWith("ws:"))) {
         const msg = "Security Block: This app is running on HTTPS, but trying to connect to an insecure HTTP/WS server. Most browsers will block this 'Mixed Content'. Use HTTPS for your server or run this app locally on HTTP.";
-        tab.runtime.status = "error";
-        tab.runtime.lastError = msg;
-        this.log("error", "Mixed Content Block", msg, tab.id);
-        return;
+
+        if (!isLocalhost) {
+          tab.runtime.status = "error";
+          tab.runtime.lastError = msg;
+          this.log("error", "Mixed Content Block", msg, tab.id);
+          return;
+        }
+
+        // For localhost, log a warning but allow the connection attempt to proceed
+        this.log("error", "Mixed Content Warning", "You are connecting from HTTPS to an insecure localhost server. If the connection fails, it is likely due to browser 'Mixed Content' policies. Run this app on HTTP to resolve.", tab.id);
       }
 
       tab.runtime.status = "connecting";
@@ -601,7 +622,7 @@ export const useAppStore = defineStore("app", {
       this.log("tab", "Connecting", `Connecting ${tab.name} to ${tab.draft.url}.`, tid);
       connectSocket(tab.id, tab.draft, {
         onStatus: (runtime) => {
-          tab.runtime = { ...tab.runtime, ...runtime } as ConnectionRuntime;
+          tab.runtime = { ...tab.runtime, ...runtime };
 
         },
         onEvent: (event) => {
@@ -614,8 +635,8 @@ export const useAppStore = defineStore("app", {
         },
       });
     },
-    disconnectActiveTab() {
-      const tab = this.activeTab;
+    disconnectTab(tabId?: string) {
+      const tab = tabId ? this.tabs.find(t => t.id === tabId) : this.activeTab;
       if (!tab) return;
       disconnectSocket(tab.id);
       tab.runtime = { status: "idle" };
